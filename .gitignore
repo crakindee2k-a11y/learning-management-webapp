@@ -44,3 +44,7 @@ Thumbs.db
 .cache/
 .temp/
 tmp/
+
+# Generated upload temp files
+backend/public/temp/*
+!backend/public/temp/.gitkeep

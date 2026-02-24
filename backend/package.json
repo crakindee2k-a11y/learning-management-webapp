@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "learning-management-webapp-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Learning Management WebApp for learners, instructors, and admins with course publishing, enrollment, and progress tracking.",
   "license": "ISC",
   "author": "",
   "type": "module",

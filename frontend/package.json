@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "learning-management-webapp-frontend",
   "private": true,
   "version": "0.1.0",
+  "description": "Learning Management WebApp for learners, instructors, and admins with course publishing, enrollment, and progress tracking.",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js",
