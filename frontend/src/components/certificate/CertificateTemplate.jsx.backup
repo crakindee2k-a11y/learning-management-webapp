@@ -1,0 +1,218 @@
+import { Award, Calendar, CheckCircle, GraduationCap, Shield, Sparkles } from 'lucide-react'
+
+const CertificateTemplate = ({ certificate, course, learner }) => {
+  const issueDate = certificate?.issuedAt 
+    ? new Date(certificate.issuedAt).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })
+    : 'N/A'
+
+  const recipientName = learner?.fullName || learner?.userName || 'Student'
+  const certificateId = certificate?.certificateId || 'N/A'
+  const courseTitle = course?.title || 'Course Title'
+  const instructorName = course?.instructor?.fullName
+
+  const CornerOrnament = ({ className = '' }) => (
+    <svg viewBox="0 0 64 64" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M10 52C18 52 18 42 26 42C34 42 34 52 42 52C50 52 50 42 58 42"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 34C16 34 16 28 20 28C24 28 24 34 28 34C32 34 32 28 36 28"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
+      <path
+        d="M14 16C20 16 20 10 26 10C32 10 32 16 38 16"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinecap="round"
+        opacity="0.5"
+      />
+    </svg>
+  )
+
+  const Seal = ({ className = '' }) => (
+    <div className={className}>
+      <div className="relative">
+        <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,rgba(255,83,73,0.20),rgba(255,83,73,0.06),rgba(255,83,73,0.20))] blur-[1px]" />
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-[#ff5349]/18 to-[#ff7a6d]/10 ring-1 ring-[#ff5349]/25 shadow-[0_18px_42px_-22px_rgba(15,23,42,0.35)]">
+          <div className="absolute inset-2 rounded-full ring-1 ring-dashed ring-[#ff5349]/35" />
+          <div className="absolute inset-3 rounded-full bg-white/65" />
+          <div className="relative flex flex-col items-center">
+            <Award className="h-5 w-5 text-zinc-400" />
+            <p className="mt-1 text-[10px] font-black tracking-[0.22em] text-zinc-800">LEARNHUB</p>
+            <p className="text-[9px] font-semibold tracking-[0.18em] text-zinc-500">CERTIFIED</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const WaxSeal = () => (
+    <div className="relative">
+      <div className="absolute inset-0 rounded-full bg-[#d4202f] blur-sm opacity-40" />
+      <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#d4202f] to-[#a01823] shadow-[0_8px_24px_-8px_rgba(212,32,47,0.6),inset_0_2px_6px_rgba(255,255,255,0.3),inset_0_-2px_8px_rgba(0,0,0,0.4)]">
+        <div className="absolute inset-1 rounded-full border border-[#ff6b77]/30" />
+        <div className="absolute inset-2 rounded-full border-2 border-dashed border-[#ff8a94]/25" />
+        <Award className="h-8 w-8 text-[#ffcdd2] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+      </div>
+    </div>
+  )
+
+  const FoilStamp = () => (
+    <div className="relative flex h-16 w-16 items-center justify-center">
+      <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_45deg,#f7d7a6,#d8a85a,#f7d7a6,#b17c2d,#f7d7a6)] opacity-90 shadow-[0_6px_18px_-10px_rgba(0,0,0,0.45)]" />
+      <div className="absolute inset-1 rounded-full bg-gradient-to-br from-white/65 to-white/15 mix-blend-screen" />
+      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-[#b17c2d]/60 bg-gradient-to-br from-[#f8f1e3] to-[#f2e5cf] shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),inset_0_-1px_2px_rgba(0,0,0,0.12)]">
+        <Sparkles className="h-5 w-5 text-[#b17c2d]" />
+      </div>
+    </div>
+  )
+
+  const RibbonBadge = ({ color = 'emerald', children }) => (
+    <div className="relative inline-flex">
+      <div className={`relative rounded-full bg-gradient-to-br ${color === 'emerald' ? 'from-emerald-600 to-emerald-700' : 'from-amber-600 to-amber-700'} px-4 py-2 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.3),inset_0_-1px_2px_rgba(0,0,0,0.2)]`}>
+        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
+        <span className="relative text-xs font-bold uppercase tracking-wider text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
+          {children}
+        </span>
+      </div>
+      <div className={`absolute -bottom-3 left-1/2 h-6 w-0.5 -translate-x-1/2 bg-gradient-to-b ${color === 'emerald' ? 'from-emerald-700' : 'from-amber-700'} to-transparent opacity-60`} />
+    </div>
+  )
+
+  return (
+    <div className="relative mx-auto max-w-6xl">
+      {/* Paper shadow depth */}
+      <div className="absolute inset-0 translate-y-2 rounded-[4px] bg-gradient-to-b from-zinc-400/30 to-zinc-500/40 blur-xl" />
+      
+      <div className="relative overflow-hidden rounded-[4px] bg-gradient-to-br from-[#f8f6f0] via-[#faf8f2] to-[#f5f3ed] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4),0_2px_8px_-2px_rgba(0,0,0,0.15)]">
+        {/* Paper texture overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.15] mix-blend-multiply"
+          style={{
+            backgroundImage:
+              'url("data:image/svg+xml,%3Csvg width=\"200\" height=\"200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"200\" height=\"200\" filter=\"url(%23noise)\" opacity=\"0.5\"/%3E%3C/svg%3E")'
+          }}
+        />
+        {/* Fabric crosshatch overlay */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-multiply bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(0,0,0,0.05),transparent_40%)]" />
+        
+        {/* Black doodle strokes watermark */}
+        <div className="pointer-events-none absolute inset-0 bg-[url('/doodle.jpg')] bg-center bg-[length:620px_auto] bg-repeat opacity-[0.12] contrast-[1.45] brightness-[0.25] saturate-0 mix-blend-multiply" />
+        
+        {/* Subtle paper aging gradient */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_circle_at_50%_50%,rgba(139,116,92,0.05),transparent_70%)]" />
+
+        {/* Embossed border frames + stitching */}
+        <div className="pointer-events-none absolute inset-6 rounded-[2px] border-2 border-[#d4a76a]/40 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_1px_2px_rgba(0,0,0,0.15)]" />
+        <div className="pointer-events-none absolute inset-8 rounded-[2px] border border-[#8b745c]/25" />
+        <div
+          className="pointer-events-none absolute inset-10 rounded-[6px]"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(0deg, rgba(92,74,45,0.35) 0 4px, transparent 4px 10px), repeating-linear-gradient(90deg, rgba(92,74,45,0.35) 0 4px, transparent 4px 10px), repeating-linear-gradient(180deg, rgba(92,74,45,0.35) 0 4px, transparent 4px 10px), repeating-linear-gradient(270deg, rgba(92,74,45,0.35) 0 4px, transparent 4px 10px)'
+          }}
+        />
+
+        {/* Corner ornaments - now gold/bronze */}
+        <CornerOrnament className="pointer-events-none absolute left-10 top-10 h-16 w-16 text-[#d4a76a]/60 drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]" />
+        <CornerOrnament className="pointer-events-none absolute right-10 top-10 h-16 w-16 rotate-90 text-[#d4a76a]/60 drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]" />
+        <CornerOrnament className="pointer-events-none absolute left-10 bottom-10 h-16 w-16 -rotate-90 text-[#d4a76a]/60 drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]" />
+        <CornerOrnament className="pointer-events-none absolute right-10 bottom-10 h-16 w-16 rotate-180 text-[#d4a76a]/60 drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]" />
+
+        <div className="relative px-16 py-14">
+          {/* Top section with embossed logo and ribbon badge */}
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-900 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.3)]">
+                <GraduationCap className="h-6 w-6 text-amber-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" />
+              </div>
+              <div>
+                <p className="text-xs font-black tracking-[0.24em] text-zinc-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">LEARNHUB</p>
+                <p className="text-xs font-medium text-zinc-600">Official Learning Credential</p>
+              </div>
+            </div>
+
+            <RibbonBadge color="emerald">
+              <CheckCircle className="inline h-3.5 w-3.5 mr-1" /> Verified
+            </RibbonBadge>
+          </div>
+
+          {/* Hero section with embossed title */}
+          <div className="mt-10 text-center">
+            <div className="inline-flex items-center gap-2">
+              <RibbonBadge color="amber">
+                <Sparkles className="inline h-3.5 w-3.5 mr-1" /> Certificate of Completion
+              </RibbonBadge>
+            </div>
+
+            <p className="mt-8 text-sm font-semibold uppercase tracking-[0.22em] text-zinc-600">This certifies that</p>
+
+            {/* Recipient section with elegant underline */}
+            <h2 className="mt-4 font-serif text-6xl font-bold tracking-tight text-zinc-900 drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)]">{recipientName}</h2>
+            <div className="mx-auto mt-3 h-0.5 w-96 bg-gradient-to-r from-transparent via-[#d4a76a]/50 to-transparent shadow-[0_1px_2px_rgba(0,0,0,0.1)]" />
+
+            <p className="mt-6 text-sm leading-relaxed text-zinc-700">
+              has successfully completed the course requirements approved by LearnHub and is hereby awarded this credential for
+            </p>
+
+            {/* Course section */}
+            <h3 className="mt-4 font-serif text-4xl font-bold tracking-tight text-zinc-900 drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)]">{courseTitle}</h3>
+            {course?.description && (
+              <p className="mx-auto mt-3 max-w-3xl text-sm text-zinc-600 leading-relaxed italic">{course.description}</p>
+            )}
+          </div>
+
+          {/* Meta info with wax seal + foil stamp */}
+          <div className="mt-12 grid grid-cols-12 items-end gap-8">
+            <div className="col-span-5 space-y-3">
+              <div className="flex items-center gap-2 text-sm font-semibold text-zinc-700">
+                <Calendar className="h-3.5 w-3.5 text-zinc-500" />
+                Given this {issueDate}
+              </div>
+              <p className="text-xs font-medium text-zinc-600">Certificate No: {certificateId}</p>
+              <div className="flex items-center gap-2 text-xs font-medium text-zinc-600">
+                <Shield className="h-3.5 w-3.5 text-emerald-700" />
+                Official LearnHub Credential
+              </div>
+            </div>
+
+            <div className="col-span-2 flex flex-col items-center gap-3">
+              <FoilStamp />
+              <WaxSeal />
+            </div>
+
+            <div className="col-span-5 flex flex-col items-end">
+              <div className="h-px w-64 bg-gradient-to-r from-transparent to-zinc-900/30 shadow-[0_1px_1px_rgba(255,255,255,0.5)]" />
+              <p className="mt-2 font-serif text-lg font-semibold text-zinc-900">{instructorName || 'Director of Certification'}</p>
+              <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-zinc-500">Authorized Signature</p>
+            </div>
+          </div>
+
+          {/* Footer with embossed elements */}
+          <div className="mt-10 flex items-center justify-between border-t border-[#d4a76a]/20 pt-6 text-[11px] font-medium text-zinc-600">
+            <div className="flex items-center gap-2">
+              <div className="h-1.5 w-1.5 rounded-full bg-[#d4a76a] shadow-[0_1px_2px_rgba(0,0,0,0.2)]" />
+              LearnHub Institute
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+              Digitally Verified Credential
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default CertificateTemplate
