@@ -17,6 +17,8 @@ import connectDb from './db/index.js';
 import app from './app.js';
 import { BankAccount} from './model/bankAccount.model.js';  
 import { Admin } from './model/Admin.model.js';
+import { Learner } from './model/learner.model.js';
+import { Instructor } from './model/instructor.model.js';
 import { User } from './model/user.model.js';
 import { bankAccountData } from './utils/bankAccountData.js'; 
 
@@ -101,16 +103,144 @@ const ensureAdminUser = async () => {
   }
 };
 
+const isTruthy = (value) => ['true', '1', 'yes'].includes((value || '').toLowerCase());
+
+const ensureBankAccountByNumber = async (accountNumber) => {
+  if (!accountNumber) return null;
+
+  const existing = await BankAccount.findOne({ account_number: accountNumber });
+  if (existing) return existing;
+
+  const seedAccount = bankAccountData.find((account) => account.account_number === accountNumber);
+  if (seedAccount) {
+    return BankAccount.create(seedAccount);
+  }
+
+  return BankAccount.create({
+    account_number: accountNumber,
+    current_balance: 5000,
+    secret_key: `demo-${accountNumber}`,
+  });
+};
+
+const ensureRoleUser = async ({
+  RoleModel,
+  role,
+  email,
+  password,
+  userName,
+  fullName,
+  shouldReset,
+  bankAccountNumber,
+}) => {
+  const existing = await User.findOne({
+    $or: [{ email }, { userName }],
+  });
+
+  let bankDetails = null;
+  if (bankAccountNumber) {
+    const bank = await ensureBankAccountByNumber(bankAccountNumber);
+    bankDetails = {
+      bank_account_number: bank.account_number,
+      bank_secret: bank.secret_key,
+    };
+  }
+
+  if (existing) {
+    if (existing.role !== role) {
+      console.warn(
+        `⚠️ ${role} seed skipped: existing user found with same email/username but role ${existing.role}.`,
+      );
+      return;
+    }
+
+    if (shouldReset) {
+      existing.fullName = fullName;
+      existing.userName = userName;
+      existing.email = email;
+      existing.password = password;
+
+      if (bankDetails) {
+        existing.bank_account_number = bankDetails.bank_account_number;
+        existing.bank_secret = bankDetails.bank_secret;
+      }
+
+      await existing.save();
+      console.log(`✅ ${role} user updated: ${email}`);
+    }
+    return;
+  }
+
+  await RoleModel.create({
+    fullName,
+    userName,
+    email,
+    password,
+    role,
+    ...(bankDetails || {}),
+  });
+  console.log(`✅ ${role} user seeded: ${email}`);
+};
+
+const ensureDemoUsers = async () => {
+  try {
+    if (isTruthy(process.env.DEMO_USERS_ENABLED || 'true') === false) return;
+
+    const shouldReset = isTruthy(process.env.DEMO_USERS_RESET_PASSWORD || '');
+    const adminAccountNumber = process.env.ADMIN_BANK_ACCOUNT_NUMBER;
+    const demoBankPool = bankAccountData
+      .map((account) => account.account_number)
+      .filter((number) => number !== adminAccountNumber);
+
+    const learnerBankAccount =
+      process.env.DEMO_LEARNER_BANK_ACCOUNT_NUMBER || demoBankPool[0] || null;
+    let instructorBankAccount =
+      process.env.DEMO_INSTRUCTOR_BANK_ACCOUNT_NUMBER || demoBankPool[1] || demoBankPool[0] || null;
+
+    if (learnerBankAccount && instructorBankAccount === learnerBankAccount) {
+      instructorBankAccount =
+        demoBankPool.find((accountNumber) => accountNumber !== learnerBankAccount) ||
+        instructorBankAccount;
+    }
+
+    await ensureRoleUser({
+      RoleModel: Learner,
+      role: 'Learner',
+      email: process.env.DEMO_LEARNER_EMAIL || 'learner@demo.lms',
+      password: process.env.DEMO_LEARNER_PASSWORD || 'learner123',
+      userName: process.env.DEMO_LEARNER_USERNAME || 'demo_learner',
+      fullName: process.env.DEMO_LEARNER_FULL_NAME || 'Demo Learner',
+      shouldReset,
+      bankAccountNumber: learnerBankAccount,
+    });
+
+    await ensureRoleUser({
+      RoleModel: Instructor,
+      role: 'Instructor',
+      email: process.env.DEMO_INSTRUCTOR_EMAIL || 'instructor@demo.lms',
+      password: process.env.DEMO_INSTRUCTOR_PASSWORD || 'instructor123',
+      userName: process.env.DEMO_INSTRUCTOR_USERNAME || 'demo_instructor',
+      fullName: process.env.DEMO_INSTRUCTOR_FULL_NAME || 'Demo Instructor',
+      shouldReset,
+      bankAccountNumber: instructorBankAccount,
+    });
+  } catch (error) {
+    console.error('❌ Error ensuring demo users:', error);
+  }
+};
+
 
 
 connectDb()
   .then(() => {
-    app.listen(process.env.PORT || 5000, () => {
+    app.listen(process.env.PORT || 5000, async () => {
       console.log(`port is listening at ${process.env.PORT || 5000}`);
       // Ensure admin bank account exists
-      ensureAdminBankAccount();
+      await ensureAdminBankAccount();
       // Ensure admin user exists
-      ensureAdminUser();
+      await ensureAdminUser();
+      // Ensure learner/instructor demo users exist
+      await ensureDemoUsers();
     });
   })
   .catch((error) => {

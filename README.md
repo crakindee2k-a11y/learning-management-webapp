@@ -80,11 +80,14 @@ npm run dev
 | Role | Email | Password |
 | --- | --- | --- |
 | `Admin` | `admin@lms.com` | `admin123` |
+| `Learner` | `learner@demo.lms` | `learner123` |
+| `Instructor` | `instructor@demo.lms` | `instructor123` |
 
 Notes:
 
 - These defaults come from `ADMIN_EMAIL` / `ADMIN_PASSWORD` in backend env and can be changed.
-- Learner and Instructor accounts are not auto-seeded; create them from the Signup page for demo use.
+- Learner and Instructor demo accounts are auto-seeded on backend startup.
+- Demo seeding can be controlled with `DEMO_USERS_ENABLED` and `DEMO_USERS_RESET_PASSWORD`.
 
 ## Environment variables (`backend/.env`)
 
@@ -111,6 +114,18 @@ Notes:
 | `ADMIN_USERNAME` | `admin` | Seed admin username |
 | `ADMIN_FULL_NAME` | `System Admin` | Seed admin full name |
 | `ADMIN_RESET_PASSWORD` | unset | If truthy, updates existing admin credentials |
+| `DEMO_USERS_ENABLED` | `true` | If falsy (`false`, `0`, `no`), skips learner/instructor demo seeding |
+| `DEMO_USERS_RESET_PASSWORD` | unset | If truthy, updates existing demo learner/instructor credentials |
+| `DEMO_LEARNER_EMAIL` | `learner@demo.lms` | Demo learner login email |
+| `DEMO_LEARNER_PASSWORD` | `learner123` | Demo learner login password |
+| `DEMO_LEARNER_USERNAME` | `demo_learner` | Demo learner username |
+| `DEMO_LEARNER_FULL_NAME` | `Demo Learner` | Demo learner display name |
+| `DEMO_LEARNER_BANK_ACCOUNT_NUMBER` | `2022331090` | Bank account linked to demo learner |
+| `DEMO_INSTRUCTOR_EMAIL` | `instructor@demo.lms` | Demo instructor login email |
+| `DEMO_INSTRUCTOR_PASSWORD` | `instructor123` | Demo instructor login password |
+| `DEMO_INSTRUCTOR_USERNAME` | `demo_instructor` | Demo instructor username |
+| `DEMO_INSTRUCTOR_FULL_NAME` | `Demo Instructor` | Demo instructor display name |
+| `DEMO_INSTRUCTOR_BANK_ACCOUNT_NUMBER` | `2022331091` | Bank account linked to demo instructor |
 | `CLOUDINARY_CLOUD_NAME` | unset | Required for upload features |
 | `CLOUDINARY_API_KEY` | unset | Required for upload features |
 | `CLOUDINARY_API_SECRET` | unset | Required for upload features |
