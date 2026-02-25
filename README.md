@@ -15,12 +15,15 @@ Learning Management WebApp is a role-based LMS for **Learners**, **Instructors**
 - `frontend/`: React + Vite + Tailwind (SPA)
 - `backend/`: Node.js + Express + MongoDB + Mongoose (REST API)
 - Media storage: Cloudinary (for uploaded video/resource files)
-- Frontend deploy: Netlify (`netlify.toml` uses `frontend` as build base)
+- Deploy options:
+  - Railway single-service deploy from repo root (recommended)
+  - Netlify frontend + separate backend deploy
 
 ## Project structure
 
 ```text
 .
+├── package.json
 ├── backend/
 ├── frontend/
 ├── netlify.toml
@@ -29,7 +32,7 @@ Learning Management WebApp is a role-based LMS for **Learners**, **Instructors**
 
 ## Prerequisites
 
-- Node.js 18+ (LTS recommended)
+- Node.js 20.19+ (required for Vite 7 build)
 - npm 9+
 - MongoDB instance (local or Atlas)
 - Cloudinary account (needed for media upload features)
@@ -104,6 +107,7 @@ npm run dev
 ### Backend (`backend/package.json`)
 
 - `npm run dev`: run backend with nodemon (`server.js`)
+- `npm run start`: run backend in production (`server.js`)
 
 ### Frontend (`frontend/package.json`)
 
@@ -112,7 +116,43 @@ npm run dev
 - `npm run preview`: preview production build
 - `npm run lint`: run ESLint
 
-## Deployment notes
+### Root (`package.json`)
+
+- `npm run build`: install backend + frontend dependencies, then build frontend
+- `npm run start`: start backend (Railway process command)
+- `npm run dev:backend`: run backend in dev mode
+- `npm run dev:frontend`: run frontend in dev mode
+
+## Railway deployment (single service)
+
+This repo is configured so Railway can deploy from the repository root:
+
+- Build command: `npm run build`
+- Start command: `npm run start`
+- Port: Railway-provided `PORT` is used automatically
+- Health check endpoint: `/api/health`
+
+### Railway environment variables
+
+Set these in Railway:
+
+- `NODE_ENV=production`
+- `MONGODB_URL`
+- `ACCESS_TOKEN_SECRET`
+- `REFRESH_TOKEN_SECRET`
+- `ADMIN_BANK_ACCOUNT_NUMBER`
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+
+Notes:
+
+- `CLIENT_URL` is optional for single-service Railway deploys (Railway domain is auto-allowed).
+- Frontend defaults to same-origin `/api` when `VITE_API_BASE_URL` is not set.
+
+Note: this project uses cookie-based auth with `withCredentials`, so backend must be HTTPS in production.
+
+## Netlify + separate backend (alternative)
 
 Frontend is configured for Netlify via `netlify.toml`:
 
@@ -120,6 +160,12 @@ Frontend is configured for Netlify via `netlify.toml`:
 - build command: `npm run build`
 - publish dir: `dist`
 - SPA redirect: `/* -> /index.html`
+
+For this setup:
+
+1. Deploy backend separately.
+2. Set backend `CLIENT_URL=https://your-netlify-site.netlify.app` (or comma-separated list for preview URLs).
+3. Set Netlify env `VITE_API_BASE_URL=https://your-backend-domain.com`.
 
 ## API notes
 
@@ -162,4 +208,3 @@ gh repo edit crakindee2k-a11y/learning-management-webapp \
 - Open repository on GitHub
 - `Settings` -> `General` -> edit **Description**
 - In the right sidebar, edit **About** -> **Topics**
-

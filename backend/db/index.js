@@ -1,15 +1,24 @@
 import mongoose from "mongoose";
-const DB_name = "lms"
+
+const DB_name = "lms";
+
 const connectDb = async () => {
+  const mongodbBaseUrl = (process.env.MONGODB_URL || "").replace(/\/+$/, "");
+  if (!mongodbBaseUrl) {
+    throw new Error("MONGODB_URL is required");
+  }
+
   try {
     const connection = await mongoose.connect(
-      `${process.env.MONGODB_URL}/${DB_name}`
+      `${mongodbBaseUrl}/${DB_name}`
     );
     if (connection) {
       console.log("Database connected successfully");
     }
+    return connection;
   } catch (err) {
     console.log("Error while connecting to database", err);
+    throw err;
   }
 };
 

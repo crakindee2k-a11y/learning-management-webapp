@@ -111,7 +111,8 @@ export const loginUser = asyncHandler(async (req, res) => {
   // SECURITY: Never return sensitive fields (password, secrets) to frontend
   const sanitizedUser = await User.findById(user._id).select("-password -refreshToken -bank_secret -bank_account_number");
   // SECURITY: HTTP-only cookies prevent XSS attacks, secure flag for HTTPS only
-  const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" };
+  const isProduction = process.env.NODE_ENV === "production";
+  const cookieOptions = { httpOnly: true, secure: isProduction, sameSite: isProduction ? "none" : "lax" };
 
   return res
     .status(200)
@@ -126,7 +127,8 @@ export const loginUser = asyncHandler(async (req, res) => {
 // FLOW: Clear refresh token from DB + Clear cookies → User logged out
 export const logoutUser = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
-  const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" };
+  const isProduction = process.env.NODE_ENV === "production";
+  const cookieOptions = { httpOnly: true, secure: isProduction, sameSite: isProduction ? "none" : "lax" };
 
   if (userId) {
     await User.findByIdAndUpdate(userId, { refreshToken: null });
