@@ -73,6 +73,19 @@ cd ../frontend
 npm run dev
 ```
 
+## Demo accounts
+
+### Seeded by backend startup
+
+| Role | Email | Password |
+| --- | --- | --- |
+| `Admin` | `admin@lms.com` | `admin123` |
+
+Notes:
+
+- These defaults come from `ADMIN_EMAIL` / `ADMIN_PASSWORD` in backend env and can be changed.
+- Learner and Instructor accounts are not auto-seeded; create them from the Signup page for demo use.
+
 ## Environment variables (`backend/.env`)
 
 ### Required
