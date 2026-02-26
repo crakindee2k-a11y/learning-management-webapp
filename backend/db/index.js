@@ -1,25 +1,30 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
-const DB_name = "lms";
+const DEFAULT_DB_NAME = 'lms'
 
 const connectDb = async () => {
-  const mongodbBaseUrl = (process.env.MONGODB_URL || "").replace(/\/+$/, "");
+  const mongodbBaseUrl = (process.env.MONGODB_URL || '').replace(/\/+$/, '')
   if (!mongodbBaseUrl) {
-    throw new Error("MONGODB_URL is required");
+    throw new Error('MONGODB_URL is required')
   }
+
+  const dbName = process.env.MONGODB_DB || DEFAULT_DB_NAME
+  const authSource = process.env.MONGODB_AUTH_SOURCE || 'admin'
 
   try {
-    const connection = await mongoose.connect(
-      `${mongodbBaseUrl}/${DB_name}`
-    );
-    if (connection) {
-      console.log("Database connected successfully");
-    }
-    return connection;
-  } catch (err) {
-    console.log("Error while connecting to database", err);
-    throw err;
-  }
-};
+    const connection = await mongoose.connect(`${mongodbBaseUrl}/${dbName}`, {
+      authSource,
+    })
 
-export default connectDb;
+    if (connection) {
+      console.log('Database connected successfully')
+    }
+
+    return connection
+  } catch (err) {
+    console.log('Error while connecting to database', err)
+    throw err
+  }
+}
+
+export default connectDb
