@@ -6,6 +6,16 @@ Learning Management WebApp is a role-based LMS for **Learners**, **Instructors**
 
 - Deployed link: https://deens-learning-management-webapp.up.railway.app
 
+## Demo accounts
+
+### Seeded by backend startup
+
+| Role | Email | Password |
+| --- | --- | --- |
+| `Admin` | `admin@lms.com` | `admin123` |
+| `Learner` | `learner@demo.lms` | `learner123` |
+| `Instructor` | `instructor@demo.lms` | `instructor123` |
+
 ## Core capabilities
 
 - Learner: browse courses, buy/enroll, watch course videos, track progress, view certificates
@@ -76,16 +86,6 @@ npm run dev
 cd ../frontend
 npm run dev
 ```
-
-## Demo accounts
-
-### Seeded by backend startup
-
-| Role | Email | Password |
-| --- | --- | --- |
-| `Admin` | `admin@lms.com` | `admin123` |
-| `Learner` | `learner@demo.lms` | `learner123` |
-| `Instructor` | `instructor@demo.lms` | `instructor123` |
 
 Notes:
 
