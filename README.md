@@ -2,6 +2,10 @@
 
 Learning Management WebApp is a role-based LMS for **Learners**, **Instructors**, and **Admins** with course publishing, enrollment, progress tracking, and transaction monitoring.
 
+## Live Demo
+
+- Deployed link: deens-learning-management-webapp.up.railway.app
+
 ## Core capabilities
 
 - Learner: browse courses, buy/enroll, watch course videos, track progress, view certificates
