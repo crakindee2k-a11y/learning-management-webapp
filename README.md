@@ -13,8 +13,8 @@ Learning Management WebApp is a role-based LMS for **Learners**, **Instructors**
 | Role | Email | Password |
 | --- | --- | --- |
 | `Admin` | `admin@lms.com` | `admin123` |
-| `Learner` | `Sign-up yourself` | `learner123` |
-| `Instructor` | `Sign-up yourself` | `instructor123` |
+| `Learner` | `Sign-up yourself` |  |
+| `Instructor` | `Sign-up yourself` |  |
 
 ## Core capabilities
 
