@@ -100,36 +100,6 @@ Notes:
 | `REFRESH_TOKEN_SECRET` | JWT secret for refresh tokens |
 | `ADMIN_BANK_ACCOUNT_NUMBER` | Seeded admin bank account number |
 
-### Optional / defaulted
-
-| Key | Default | Notes |
-| --- | --- | --- |
-| `PORT` | `5000` | Backend port |
-| `CLIENT_URL` | `http://localhost:5173` | Allowed frontend origin |
-| `NODE_ENV` | unset | Set `production` in production |
-| `ACCESS_TOKEN_EXPIRY` | `15m` | Access token expiry |
-| `REFRESH_TOKEN_EXPIRY` | `7d` | Refresh token expiry |
-| `ADMIN_EMAIL` | `admin@lms.com` | Seed admin email |
-| `ADMIN_PASSWORD` | `admin123` | Seed admin password |
-| `ADMIN_USERNAME` | `admin` | Seed admin username |
-| `ADMIN_FULL_NAME` | `System Admin` | Seed admin full name |
-| `ADMIN_RESET_PASSWORD` | unset | If truthy, updates existing admin credentials |
-| `DEMO_USERS_ENABLED` | `true` | If falsy (`false`, `0`, `no`), skips learner/instructor demo seeding |
-| `DEMO_USERS_RESET_PASSWORD` | unset | If truthy, updates existing demo learner/instructor credentials |
-| `DEMO_LEARNER_EMAIL` | `learner@demo.lms` | Demo learner login email |
-| `DEMO_LEARNER_PASSWORD` | `learner123` | Demo learner login password |
-| `DEMO_LEARNER_USERNAME` | `demo_learner` | Demo learner username |
-| `DEMO_LEARNER_FULL_NAME` | `Demo Learner` | Demo learner display name |
-| `DEMO_LEARNER_BANK_ACCOUNT_NUMBER` | `2022331090` | Bank account linked to demo learner |
-| `DEMO_INSTRUCTOR_EMAIL` | `instructor@demo.lms` | Demo instructor login email |
-| `DEMO_INSTRUCTOR_PASSWORD` | `instructor123` | Demo instructor login password |
-| `DEMO_INSTRUCTOR_USERNAME` | `demo_instructor` | Demo instructor username |
-| `DEMO_INSTRUCTOR_FULL_NAME` | `Demo Instructor` | Demo instructor display name |
-| `DEMO_INSTRUCTOR_BANK_ACCOUNT_NUMBER` | `2022331091` | Bank account linked to demo instructor |
-| `CLOUDINARY_CLOUD_NAME` | unset | Required for upload features |
-| `CLOUDINARY_API_KEY` | unset | Required for upload features |
-| `CLOUDINARY_API_SECRET` | unset | Required for upload features |
-
 ## Scripts
 
 ### Backend (`backend/package.json`)
